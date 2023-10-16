@@ -175,6 +175,13 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "hierarchical_superior_id")
     private Employee hierarchicalSuperior;
-  }
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Positioning> positioningList;
+
+
+}
 
 

@@ -70,6 +70,6 @@ public class User implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "userp", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Partner>  Partner= new ArrayList<>();
+	private List<Admin>  Partner= new ArrayList<>();
 
 }

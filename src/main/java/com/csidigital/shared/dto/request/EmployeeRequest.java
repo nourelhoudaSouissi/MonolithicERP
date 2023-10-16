@@ -95,6 +95,7 @@ public class EmployeeRequest {
     private EmployeeRequest hierarchicalSuperior;
     private Byte[] photo ;
 
+    private List<Positioning> positioningList;
 
 }
 

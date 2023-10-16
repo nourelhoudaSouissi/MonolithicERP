@@ -1,10 +1,10 @@
 package com.csidigital.controllers;
 
 import com.csidigital.models.Customer;
-import com.csidigital.models.Partner;
+import com.csidigital.models.Admin;
 import com.csidigital.models.User;
 import com.csidigital.repository.CustomerRepository;
-import com.csidigital.repository.PartnerRepository;
+import com.csidigital.repository.PartnerAdminRepository;
 import com.csidigital.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth/part")
-public class PartnerController {
+public class PartnerAdminController {
     @Autowired
-    private PartnerRepository partnerRepository;
+    private PartnerAdminRepository partnerRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -58,19 +58,19 @@ public class PartnerController {
     }
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_CUSTOMER_USER')")
     @PostMapping("/create")
-    public ResponseEntity<?> createPartner(@RequestBody Partner partner) {
+    public ResponseEntity<?> createPartner(@RequestBody Admin partner) {
         try {
             Customer currentCustomer = getCurrentCustomer();
 
             if (currentCustomer != null) {
                 partner.setUserp(currentCustomer.getUser());
-                Partner createdPartner = partnerRepository.save(partner);
+                Admin createdPartner = partnerRepository.save(partner);
                 return ResponseEntity.status(HttpStatus.CREATED).body(createdPartner);
             } else {
                 User currentUser = getCurrentUser();
                 if (currentUser != null) {
                     partner.setUserp(currentUser);
-                    Partner createdPartner = partnerRepository.save(partner);
+                    Admin createdPartner = partnerRepository.save(partner);
                     return ResponseEntity.status(HttpStatus.CREATED).body(createdPartner);
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -88,7 +88,7 @@ public class PartnerController {
         // Read a specific Partner by ID
         @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_CUSTOMER_USER')")
         @GetMapping("/partners")
-        public List<Partner> getAllPartners() {
+        public List<Admin> getAllPartners() {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
 
@@ -152,9 +152,9 @@ public class PartnerController {
         if (optionalCustomer.isPresent()) {
             // Current authenticated user is a customer
             Customer currentCustomer = optionalCustomer.get();
-            Optional<Partner> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentCustomer.getUser().getId());
+            Optional<Admin> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentCustomer.getUser().getId());
             if (optionalPartner.isPresent()) {
-                Partner partner = optionalPartner.get();
+                Admin partner = optionalPartner.get();
                 return ResponseEntity.ok(partner);
             }
         } else {
@@ -162,9 +162,9 @@ public class PartnerController {
             if (optionalUser.isPresent()) {
                 // Current authenticated user is not a customer but a regular user
                 User currentUser = optionalUser.get();
-                Optional<Partner> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentUser.getId());
+                Optional<Admin> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentUser.getId());
                 if (optionalPartner.isPresent()) {
-                    Partner partner = optionalPartner.get();
+                    Admin partner = optionalPartner.get();
                     return ResponseEntity.ok(partner);
                 }
             }
@@ -177,7 +177,7 @@ public class PartnerController {
     // Update a Partner
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_CUSTOMER_USER')")
     @PutMapping("/update{id}")
-    public ResponseEntity<?> updatePartner(@PathVariable("id") Long id, @RequestBody Partner updatedPartner) {
+    public ResponseEntity<?> updatePartner(@PathVariable("id") Long id, @RequestBody Admin updatedPartner) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -185,9 +185,9 @@ public class PartnerController {
         if (optionalCustomer.isPresent()) {
             // Current authenticated user is a customer
             Customer currentCustomer = optionalCustomer.get();
-            Optional<Partner> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentCustomer.getUser().getId());
+            Optional<Admin> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentCustomer.getUser().getId());
             if (optionalPartner.isPresent()) {
-                Partner partner = optionalPartner.get();
+                Admin partner = optionalPartner.get();
                 partner.setName(updatedPartner.getName());
                 partner.setCompanyStatus(updatedPartner.getCompanyStatus());
                 partner.setStaffNumber(updatedPartner.getStaffNumber());
@@ -209,7 +209,7 @@ public class PartnerController {
                 partner.setPartnerShipDate(updatedPartner.getPartnerShipDate());
                 partner.setProvenance(updatedPartner.getProvenance());
 
-                Partner updatedPartnerData = partnerRepository.save(partner);
+                Admin updatedPartnerData = partnerRepository.save(partner);
                 return ResponseEntity.ok(updatedPartnerData);
             }
         } else {
@@ -217,9 +217,9 @@ public class PartnerController {
             if (optionalUser.isPresent()) {
                 // Current authenticated user is not a customer but a regular user
                 User currentUser = optionalUser.get();
-                Optional<Partner> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentUser.getId());
+                Optional<Admin> optionalPartner = partnerRepository.findByIdAndUserpId(id, currentUser.getId());
                 if (optionalPartner.isPresent()) {
-                    Partner partner = optionalPartner.get();
+                    Admin partner = optionalPartner.get();
                     partner.setName(updatedPartner.getName());
                     partner.setCompanyStatus(updatedPartner.getCompanyStatus());
                     partner.setStaffNumber(updatedPartner.getStaffNumber());
@@ -241,7 +241,7 @@ public class PartnerController {
                     partner.setPartnerShipDate(updatedPartner.getPartnerShipDate());
                     partner.setProvenance(updatedPartner.getProvenance());
 
-                    Partner updatedPartnerData = partnerRepository.save(partner);
+                    Admin updatedPartnerData = partnerRepository.save(partner);
                     return ResponseEntity.ok(updatedPartnerData);
                 }
             }

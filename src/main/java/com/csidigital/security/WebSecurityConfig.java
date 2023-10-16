@@ -92,7 +92,7 @@ public class WebSecurityConfig {
 				.csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().requestMatchers("/api/auth/**").permitAll().requestMatchers("/api/auth/part").permitAll()
+				.authorizeRequests().requestMatchers("/api/auth/**").permitAll().requestMatchers("/api/auth/part").permitAll().requestMatchers("/**").permitAll()
 				.anyRequest().authenticated().and()
 				.authenticationProvider(userAuthenticationProvider())
 				.authenticationProvider(customerAuthenticationProvider())

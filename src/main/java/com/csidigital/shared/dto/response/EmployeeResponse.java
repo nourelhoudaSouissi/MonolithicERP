@@ -113,6 +113,7 @@ private Long hierarchicalSuperiorNum;
     private List<OfferCandidate> AssOfferCandidateList;
 private  List<Offer> offers;
 
+    private List<Positioning> positioningList;
 
 
 

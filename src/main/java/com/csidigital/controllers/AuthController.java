@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.csidigital.repository.PartnerRepository;
+import com.csidigital.repository.PartnerAdminRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,7 +66,7 @@ public class AuthController {
   @Autowired
   private EmailService emailService;
   @Autowired
-  private PartnerRepository partnerRepository;
+  private PartnerAdminRepository partnerRepository;
 
   @Autowired
   UserRepository userRepository;
