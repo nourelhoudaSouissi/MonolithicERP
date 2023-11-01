@@ -19,8 +19,6 @@ import java.util.List;
 
 public class Resource extends Employee{
 
-
-
     private String socialSecurityNumber;
     private String bankAccountNumber;
 

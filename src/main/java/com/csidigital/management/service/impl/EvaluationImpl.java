@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,29 +41,32 @@ public class EvaluationImpl implements EvaluationService {
 
    @Override
     public void calculateGlobalAppreciation(Long evaluationId) {
-        Evaluation evaluation = evaluationRepository.findById(evaluationId)
-                .orElseThrow(() -> new EntityNotFoundException("Evaluation not found"));
+       Evaluation evaluation = evaluationRepository.findById(evaluationId)
+               .orElseThrow(() -> new EntityNotFoundException("Evaluation not found"));
 
-        List<Interview> interviews = evaluation.getInterviews();
+       List<Interview> interviews = evaluation.getInterviews();
 
-        double totalMarksSum = 0;
-        double coefficientsSum = 0;
+       double totalMarksSum = 0;
+       double coefficientsSum = 0;
 
-        for (Interview interview : interviews) {
-            totalMarksSum += interview.getInterviewMark();
-            coefficientsSum += interview.getCoefficient();
-        }
+       for (Interview interview : interviews) {
+           totalMarksSum += interview.getInterviewMark();
+           coefficientsSum += interview.getCoefficient();
+       }
 
-        if (coefficientsSum > 0) {
-            double globalInterviewMark = totalMarksSum / coefficientsSum;
+       if (coefficientsSum > 0) {
+           double globalInterviewMark = totalMarksSum / coefficientsSum;
 
-            // Utiliser DecimalFormat pour formater le résultat avec deux chiffres après la virgule
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-          String formattedGlobalInterviewMark = decimalFormat.format(globalInterviewMark);
+           // Utiliser DecimalFormat pour formater le résultat avec deux chiffres après le point décimal
+           DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+           symbols.setDecimalSeparator('.');
+           DecimalFormat decimalFormat = new DecimalFormat("#.##", symbols);
+           String formattedGlobalInterviewMark = decimalFormat.format(globalInterviewMark);
 
-            evaluation.setGlobalAppreciation(Double.parseDouble(formattedGlobalInterviewMark));
+           evaluation.setGlobalAppreciation(Double.parseDouble(formattedGlobalInterviewMark));
 
-            evaluationRepository.save(evaluation);
+           evaluationRepository.save(evaluation);
+
         }
     }
 
