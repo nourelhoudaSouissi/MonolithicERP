@@ -97,5 +97,9 @@ public class EmployeeRequest {
 
     private List<Positioning> positioningList;
 
+
+    private List<Long> projectNum ;
+
+    private  Long PrjNum;
 }
 

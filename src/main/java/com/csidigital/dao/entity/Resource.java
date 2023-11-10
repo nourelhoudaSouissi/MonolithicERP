@@ -32,11 +32,11 @@ public class Resource extends Employee{
     @OneToMany(mappedBy = "resource")
     private List<Contract> contractsList;
 
-    @JsonIgnore
+   /* @JsonIgnore
     @ManyToMany
     private List<Project> project;
 
     @JsonIgnore
     @OneToMany
-    private List<SubTask> subTasks;
+    private List<SubTask> subTasks;*/
 }

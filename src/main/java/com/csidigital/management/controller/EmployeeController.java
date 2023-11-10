@@ -291,7 +291,10 @@ public class EmployeeController {
     }
 
 
-
+    @GetMapping("/getAllResources")
+    public List<Employee>  getAllResources(){
+        return employeeService.getAllResources();
+    }
 }
 
 

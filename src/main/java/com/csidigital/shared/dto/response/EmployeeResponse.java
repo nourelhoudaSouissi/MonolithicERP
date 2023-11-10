@@ -121,7 +121,8 @@ private  List<Offer> offers;
 
 
 
-
+    private List<Long> projectId ;
+    private Long prjId ;
 
 
 }

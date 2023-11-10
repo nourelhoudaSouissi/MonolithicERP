@@ -528,6 +528,11 @@ employeeResponse.setOffers(offers);
         return employeeRepository.updateNoteEvaluationFromGlobalAppreciation();
     }
 
+    @Override
+    public List<Employee> getAllResources() {
+        return employeeRepository.getAllResources();
+    }
+
 }
 
 

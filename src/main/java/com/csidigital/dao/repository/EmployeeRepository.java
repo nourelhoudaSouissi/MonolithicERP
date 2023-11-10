@@ -137,5 +137,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Transactional
     @Query("UPDATE Employee e SET e.noteEvaluation = (SELECT AVG(ev.globalAppreciation) FROM Evaluation ev WHERE ev.employee = e)")
     Double updateNoteEvaluationFromGlobalAppreciation();
-
+    @Query(value ="SELECT * FROM employee WHERE employee_status='CONVERTED_TO_RESOURCE' and resource_type= 'EXTERNAL_RESOURCE' or resource_type= 'INTERNAL_RESOURCE' ", nativeQuery = true)
+    List<Employee> getAllResources();
 }

@@ -1,7 +1,7 @@
 package com.csidigital.management.service;
 
 
-import com.csidigital.dao.entity.Resource;
+import com.csidigital.dao.entity.Employee;
 import com.csidigital.shared.dto.request.ProjectDtoRequest;
 import com.csidigital.shared.dto.response.ProjectDtoResponse;
 
@@ -24,7 +24,7 @@ public interface ProjectService {
 
     ProjectDtoResponse updateProject(Long id, ProjectDtoRequest projectDtoRequest);
 
-     List<Resource> getProjectResource(Long id);
+     List<Employee> getProjectResource(Long id);
     //delete project by id
     void deleteProjectById(Long id);
 }

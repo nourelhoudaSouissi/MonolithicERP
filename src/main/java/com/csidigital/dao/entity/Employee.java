@@ -2,6 +2,7 @@ package com.csidigital.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.csidigital.shared.enumeration.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -176,11 +178,17 @@ public class Employee {
     @JoinColumn(name = "hierarchical_superior_id")
     private Employee hierarchicalSuperior;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Positioning> positioningList;
 
+    @JsonIgnore
+    @ManyToMany
+    private List<Project> project;
+
+    @JsonIgnore
+    @OneToMany
+    private List<SubTask> subTasks;
 
 }
 

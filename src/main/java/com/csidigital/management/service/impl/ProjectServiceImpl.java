@@ -23,6 +23,9 @@ public class ProjectServiceImpl implements ProjectService {
     private  ProjectRepository projectRepository;
     @Autowired
     private ResourceRepository resourceRepository ;
+
+    @Autowired
+    private EmployeeRepository employeeRepository ;
     @Autowired
     private PhaseRepository phaseRepository ;
     @Autowired
@@ -93,11 +96,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Resource> getProjectResource(Long id) {
+    public List<Employee> getProjectResource(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Project with id " +id+ " not found"));
 
-        return project.getResources();
+        return project.getEmployees();
 
     }
     public List<ResponsableExtern> getProjectResp(Long id) {
@@ -120,8 +123,9 @@ public class ProjectServiceImpl implements ProjectService {
         String projectReference = String.format("PR_%04d", sequence.getNextValue());
         project.setProjectReference(projectReference);
 
-        List<Resource> existingResources = resourceRepository.findAllById(projectDtoRequest.getResourceIds());
-        for(Resource res : existingResources) {
+        List<Employee> existingResources = employeeRepository.findAllById(projectDtoRequest.getEmployeeIds());
+
+        for(Employee res : existingResources) {
             res.getProject().add(project);
             //resourceRepository.save(res);
         }
@@ -142,13 +146,13 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 
-        project.setResources(existingResources);
+        project.setEmployees(existingResources);
 
         project = projectRepository.save(project);
 
 
 
-        resourceRepository.saveAll(existingResources);
+        employeeRepository.saveAll(existingResources);
 
 
         sequence.incrementNextValue();
@@ -157,12 +161,12 @@ public class ProjectServiceImpl implements ProjectService {
         return modelMapper.map(ProjectSaved, ProjectDtoResponse.class);
     }
 
-    public void addResourceToProject(Long projectId, List<Long> resourceIds) {
+    public void addResourceToProject(Long projectId, List<Long> employeeIds) {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-        List<Resource> resources = resourceRepository.findAllById(resourceIds);
-        for(Resource res : resources){
+        List<Employee> employees = employeeRepository.findAllById(employeeIds);
+        for(Employee res : employees){
             res.getProject().add(project);
-            project.getResources().add(res);
+            project.getEmployees().add(res);
         }
         // Add the resource to the project's resource list
 
@@ -173,33 +177,33 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDtoResponse updateProject(Long id, ProjectDtoRequest projectDtoRequest) {
-        Resource responsable =null;
+        Employee responsable =null;
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project with id: " + id + " not found"));
 
         modelMapper.map(projectDtoRequest, project);
 
-        List<Resource> existingResources = new ArrayList<>();
+        List<Employee> existingResources = new ArrayList<>();
 
-        for (Long resourceId : projectDtoRequest.getResourceIds()) {
-            Resource resource = resourceRepository.findById(resourceId)
+        for (Long resourceId : projectDtoRequest.getEmployeeIds()) {
+            Employee employee = employeeRepository.findById(resourceId)
                     .orElseThrow(() -> new ResourceNotFoundException("Resource with id: " + resourceId + " not found"));
-            existingResources.add(resource);
+            existingResources.add(employee);
         }
 
         // Save new resources if necessary
-        for (Resource resource : existingResources) {
-            if (resource.getId() == null) {
-                resource = resourceRepository.save(resource);
+        for (Employee employee : existingResources) {
+            if (employee.getId() == null) {
+                employee = employeeRepository.save(employee);
             }
-            resource.getProject().add(project);
+            employee.getProject().add(project);
         }
 
         // Save responsible resource if necessary
 
         responsable.getProject().add(project);
-        resourceRepository.save(responsable);
-        project.setResources(existingResources);
+        employeeRepository.save(responsable);
+        project.setEmployees(existingResources);
 
 
         Project updatedProject = projectRepository.save(project);
@@ -229,14 +233,14 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProjectById(Long id) {
         Project project = projectRepository.findById(id).orElse(null);
 
-        List<Resource> resources = project.getResources();
+        List<Employee> employees = project.getEmployees();
         List<Phase> phases = project.getPhases();
         project.setPhases(null);
-        for(Resource r : resources) {
+        for(Employee r : employees) {
             r.getProject().remove(project);
             r.setSubTasks(null);
 
-            resourceRepository.save(r);
+            employeeRepository.save(r);
         }
         for(Phase p : phases){
             p.setProject(null);

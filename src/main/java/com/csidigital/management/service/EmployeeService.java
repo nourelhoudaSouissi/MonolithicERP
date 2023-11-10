@@ -85,5 +85,7 @@ public interface EmployeeService {
 
     Double updateNoteEvaluationFromGlobalAppreciation();
 
+    List<Employee> getAllResources();
+
 }
 

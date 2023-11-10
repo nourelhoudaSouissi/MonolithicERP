@@ -44,9 +44,13 @@ public class Project implements Serializable {
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
 
+    /*@JsonIgnore
+    @ManyToMany(mappedBy = "project")
+    List<Resource> resources ;*/
+
     @JsonIgnore
     @ManyToMany(mappedBy = "project")
-    List<Resource> resources ;
+    List<Employee> employees ;
 
     @JsonIgnore
     @OneToMany(mappedBy = "project")

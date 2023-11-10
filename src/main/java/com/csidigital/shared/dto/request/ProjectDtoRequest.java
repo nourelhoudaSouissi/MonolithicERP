@@ -33,4 +33,6 @@ public class ProjectDtoRequest {
     private ProjectStatus projectStatus;
     private List<Long> resourceIds;
     private List<ResponsableExtern> responsables;
+
+    private List<Long> employeeIds;
 }

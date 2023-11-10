@@ -37,9 +37,14 @@ public class SubTask implements Serializable {
     private TaskPhase taskPhase;
     @Column(unique = true)
     private String subTaskReference;
+
+    /* @JsonIgnore
+    @ManyToOne
+    private Resource resource;*/
+
     @JsonIgnore
     @ManyToOne
-    private Resource resource;
+    private Employee employee;
 
 
     @JsonIgnore

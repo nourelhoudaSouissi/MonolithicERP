@@ -49,7 +49,7 @@ public class ProjectController {
 
     }
     @GetMapping("/getResources/{id}")
-    public List<Resource> getProjectResource(@PathVariable Long id) {
+    public List<Employee> getProjectResource(@PathVariable Long id) {
         return projectService.getProjectResource(id);
     }
     @GetMapping("/getResp/{id}")
@@ -59,8 +59,8 @@ public class ProjectController {
 
 
     @PostMapping("/{projectId}/resources")
-    public ResponseEntity<?> addResourceToProject(@PathVariable Long projectId,  @RequestBody List<Long> resourceIds) {
-        projectService.addResourceToProject(projectId, resourceIds);
+    public ResponseEntity<?> addResourceToProject(@PathVariable Long projectId,  @RequestBody List<Long> employeeIds) {
+        projectService.addResourceToProject(projectId, employeeIds);
         return ResponseEntity.ok("Resource added to the project successfully.");
     }
     @GetMapping("/{id}/tasks")

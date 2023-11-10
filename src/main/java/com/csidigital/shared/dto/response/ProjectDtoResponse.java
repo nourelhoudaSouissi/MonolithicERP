@@ -34,5 +34,8 @@ public class ProjectDtoResponse {
    private  List<Resource> resources ;
     private List<Phase> phases;
    private List<ResponsableExtern> responsables;
+    private  List<Employee> employees ;
+
+
 
 }

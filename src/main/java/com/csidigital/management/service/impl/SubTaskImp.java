@@ -25,6 +25,8 @@ public class SubTaskImp {
     @Autowired
     private ResourceRepository resourceRepository;
     @Autowired
+    private EmployeeRepository employeeRepository;
+    @Autowired
     private ProjectReferenceSequenceRepository sequenceRepository;
 
     @Autowired
@@ -56,23 +58,24 @@ public class SubTaskImp {
     public SousTacheResponse createTask(SousTacheRequest sousTacheRequest) {
 
         Resource resource = null ;
+        Employee employee = null ;
         Task tache = null ;
-        if( resourceRepository.findById(sousTacheRequest.getResourceNum()) !=null){
-            resource = resourceRepository.findById(sousTacheRequest.getResourceNum()).orElseThrow();
+        if( employeeRepository.findById(sousTacheRequest.getEmployeeNum()) !=null){
+            employee = employeeRepository.findById(sousTacheRequest.getEmployeeNum()).orElseThrow();
         }
-        if( resourceRepository.findById(sousTacheRequest.getTaskNum()) !=null){
+        if( employeeRepository.findById(sousTacheRequest.getTaskNum()) !=null){
         tache = taskRepository.findById(sousTacheRequest.getTaskNum()).orElseThrow(() -> new NoSuchElementException("Task with the given ID does not exist"));}
         SubTask subTask = modelMapper.map(sousTacheRequest, SubTask.class);
 
 
-        subTask.setResource(resource);
-        resource.getSubTasks().add(subTask);
+        subTask.setEmployee(employee);
+        employee.getSubTasks().add(subTask);
         subTask.setTask(tache);
         tache.getSubTaskList().add(subTask);
         subTask.setCreationDate(new Date());
         SubTask TaskSaved = subtaskRepository.save(subTask);
 
-            resourceRepository.save(resource);
+            employeeRepository.save(employee);
             taskRepository.save(tache);
         return modelMapper.map(TaskSaved, SousTacheResponse.class);
     }
@@ -80,28 +83,29 @@ public class SubTaskImp {
         SubTask subTask = subtaskRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Task with id: " + id + " not found"));
         Resource resource = null ;
+        Employee employee = null ;
         Task tache = null ;
-        if( resourceRepository.findById(sousTacheRequest.getResourceNum()) !=null){
-            resource = resourceRepository.findById(sousTacheRequest.getResourceNum()).orElseThrow();
+        if( employeeRepository.findById(sousTacheRequest.getEmployeeNum()) !=null){
+            employee = employeeRepository.findById(sousTacheRequest.getEmployeeNum()).orElseThrow();
         }
-        if( resourceRepository.findById(sousTacheRequest.getTaskNum()) !=null){
+        if( employeeRepository.findById(sousTacheRequest.getTaskNum()) !=null){
             tache = taskRepository.findById(sousTacheRequest.getTaskNum()).orElseThrow(() -> new NoSuchElementException("Task with the given ID does not exist"));}
         modelMapper.map(sousTacheRequest, subTask);
-        subTask.setResource(resource);
+        subTask.setEmployee(employee);
 
         subTask.setTask(tache);
 
 
         SubTask TaskSaved = subtaskRepository.save(subTask);
 
-        resourceRepository.save(resource);
+        employeeRepository.save(employee);
         taskRepository.save(tache);
         return modelMapper.map(TaskSaved, SousTacheResponse.class);
     }
 public void deleteSubTask(Long id){
         SubTask subTask = subtaskRepository.findById(id).orElseThrow();
-        Resource resource = subTask.getResource();
-        resource.getSubTasks().remove(subTask);
+        Employee employee = subTask.getEmployee();
+        employee.getSubTasks().remove(subTask);
 }
 
 
