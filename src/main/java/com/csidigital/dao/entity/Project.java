@@ -59,5 +59,10 @@ public class Project implements Serializable {
     @OneToMany
     private List<ResponsableExtern> responsables;
 
+    @JsonIgnore
+    @OneToOne( cascade= CascadeType.ALL)
+    @JoinColumn(name = "orderId")
+    private Order order;
+
 }
 

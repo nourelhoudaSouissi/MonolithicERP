@@ -36,4 +36,9 @@ public interface RequirementRepository extends JpaRepository<Requirement , Long>
     @Modifying
     @Query(value = " UPDATE requirement SET requirement_status = 'ABANDONED' WHERE id =:id", nativeQuery = true)
     void updateStatusToAbandoned(@Param("id") Long id);
+
+
+    @Query(value = "  SELECT r.total_budget FROM order_entity o JOIN quotation q ON o.quotation_id = q.id JOIN requirement r ON q.requirement_id = r.id WHERE o.id =:id;", nativeQuery = true)
+    Double getBugetTotal(@Param("id") Long id);
+
 }

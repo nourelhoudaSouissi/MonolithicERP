@@ -95,4 +95,8 @@ public class RequirementController {
         requirementService.deleteRequirement(id);
     }
 
+    @GetMapping("/{id}/getBugetTotal")
+    public Double getBugetTotal(@PathVariable Long id){
+        return requirementService.getBugetTotal(id);
+    }
 }

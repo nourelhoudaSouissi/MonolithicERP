@@ -1,5 +1,7 @@
 package com.csidigital.management.controller;
 
+import com.csidigital.dao.entity.Employee;
+import com.csidigital.dao.entity.Order;
 import com.csidigital.management.service.impl.OrderServiceImpl;
 import com.csidigital.shared.dto.request.OrderRequest;
 import com.csidigital.shared.dto.response.OrderResponse;
@@ -43,4 +45,10 @@ public class OrderController {
         OrderService.deleteOrder(id);
     }
 
+
+    @GetMapping("/getProjectOrders")
+    public List<Order>  getProjectOrders(){
+
+        return OrderService.getProjectOrders();
+    }
 }

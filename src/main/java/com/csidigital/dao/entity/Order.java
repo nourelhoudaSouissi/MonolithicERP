@@ -60,4 +60,11 @@ public class Order implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Quotation quotation;
+
+
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL,    mappedBy = "order")
+    private Project project;
+
 }

@@ -31,4 +31,5 @@ public class OrderRequest {
     private Double revenue;
     private Currency currency;*/
     private Long quotationNum;
+    private Long projectNum;
 }

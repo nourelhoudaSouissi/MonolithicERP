@@ -1,5 +1,6 @@
 package com.csidigital.management.service;
 
+import com.csidigital.dao.entity.Order;
 import com.csidigital.shared.dto.request.OrderRequest;
 import com.csidigital.shared.dto.response.OrderResponse;
 
@@ -13,4 +14,6 @@ public interface OrderService {
     OrderResponse updateOrder(OrderRequest orderRequest , Long id );
 
     void deleteOrder(Long id);
+    List<Order> getProjectOrders();
+
 }

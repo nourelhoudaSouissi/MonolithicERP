@@ -34,6 +34,9 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectReferenceSequenceRepository sequenceRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository, ProjectReferenceSequenceRepository sequenceRepository) {
         this.projectRepository = projectRepository;
         this.sequenceRepository = sequenceRepository;}
@@ -115,6 +118,9 @@ public class ProjectServiceImpl implements ProjectService {
         List<ResponsableExtern> responsableExterns = projectDtoRequest.getResponsables();
         ProjectReferenceSequence sequence = sequenceRepository.findById(1L)
                 .orElse(null) ;
+
+
+
         if (sequence == null) {
             sequence = new ProjectReferenceSequence();
             sequence = sequenceRepository.save(sequence);
@@ -122,14 +128,21 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = modelMapper.map(projectDtoRequest, Project.class);
         String projectReference = String.format("PR_%04d", sequence.getNextValue());
         project.setProjectReference(projectReference);
+       /* Order order = orderRepository.findById(projectDtoRequest.getOrderNum())
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));;
+        project.setOrder(order);*/
+        Order order = null;
+        if(projectDtoRequest.getOrderNum()!=null) {
+            order = orderRepository.findById(projectDtoRequest.getOrderNum())
+                    .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        }
+        project.setOrder(order);
 
         List<Employee> existingResources = employeeRepository.findAllById(projectDtoRequest.getEmployeeIds());
-
         for(Employee res : existingResources) {
             res.getProject().add(project);
             //resourceRepository.save(res);
         }
-
 
             if (responsableExterns != null) {
                 for (ResponsableExtern responsableExtern : responsableExterns) {
@@ -139,22 +152,9 @@ public class ProjectServiceImpl implements ProjectService {
                 }
             }
 
-
-
-
-
-
-
-
         project.setEmployees(existingResources);
-
         project = projectRepository.save(project);
-
-
-
         employeeRepository.saveAll(existingResources);
-
-
         sequence.incrementNextValue();
         sequenceRepository.save(sequence);
         Project ProjectSaved = projectRepository.save(project);

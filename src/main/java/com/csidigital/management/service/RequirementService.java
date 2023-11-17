@@ -4,6 +4,7 @@ import com.csidigital.dao.entity.Requirement;
 import com.csidigital.shared.dto.request.RequirementRequest;
 import com.csidigital.shared.dto.response.PartnerResponse;
 import com.csidigital.shared.dto.response.RequirementResponse;
+import org.springframework.data.repository.query.Param;
 
 import java.time.Period;
 import java.util.List;
@@ -29,5 +30,7 @@ public interface RequirementService {
     void updateStatusToPartiallyLost(Long id);
     void updateStatusToTotallyLost(Long id);
     void updateStatusToAbandoned(Long id);
+    Double getBugetTotal(Long id);
+
 
 }

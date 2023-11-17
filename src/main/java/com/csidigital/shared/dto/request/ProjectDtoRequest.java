@@ -35,4 +35,5 @@ public class ProjectDtoRequest {
     private List<ResponsableExtern> responsables;
 
     private List<Long> employeeIds;
+    private Long orderNum;
 }

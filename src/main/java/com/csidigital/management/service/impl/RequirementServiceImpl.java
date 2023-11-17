@@ -244,6 +244,12 @@ public class RequirementServiceImpl implements RequirementService {
     public void updateStatusToAbandoned(Long id) {
         requirementRepository.updateStatusToAbandoned(id);
     }
+
+
+    @Override
+    public Double getBugetTotal(Long id) {
+        return requirementRepository.getBugetTotal(id);
+    }
 }
 
 

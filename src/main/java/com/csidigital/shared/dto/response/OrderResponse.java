@@ -35,4 +35,6 @@ public class OrderResponse {
     private Double revenue;
     private Currency currency;*/
     private Long quotationId;
+    private Long projectNum;
+
 }

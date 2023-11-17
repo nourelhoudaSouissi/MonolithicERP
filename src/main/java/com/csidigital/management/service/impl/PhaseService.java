@@ -2,7 +2,9 @@ package com.csidigital.management.service.impl;
 
 import com.csidigital.dao.entity.*;
 import com.csidigital.dao.repository.*;
+import com.csidigital.shared.dto.request.AvailabilityRequest;
 import com.csidigital.shared.dto.request.PhaseRequest;
+import com.csidigital.shared.dto.response.AvailabilityResponse;
 import com.csidigital.shared.dto.response.PhaseResponse;
 import com.csidigital.shared.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -71,5 +73,19 @@ public class PhaseService {
 
         return phases;
     }
+    public void deletePhase(Long id) {
+
+        phaseRepository.deleteById(id);
+    }
+
+    public PhaseResponse updatePhase(PhaseRequest request, Long id) {
+        Phase existingPhase = phaseRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Phase with id: " + id + " not found"));
+        modelMapper.map(request, existingPhase);
+        Phase savedPhase = phaseRepository.save(existingPhase);
+        return modelMapper.map(savedPhase, PhaseResponse.class);
+    }
+
+
 
 }
