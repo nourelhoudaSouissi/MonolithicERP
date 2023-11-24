@@ -42,6 +42,7 @@ public class Partner implements Serializable {
     @Column(length = 10000)
     private String comment ;
 
+    @Column (nullable = true)
     @Enumerated(EnumType.STRING)
     private LegalStatus legalStatus ;
     @Lob

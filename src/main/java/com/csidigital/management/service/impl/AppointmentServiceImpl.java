@@ -46,6 +46,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         for (Appointment appointment : appointments) {
             AppointmentResponse response = modelMapper.map(appointment, AppointmentResponse.class);
             response.setContactFullName(appointment.getContact().getFullName());
+            response.setContactEmail(appointment.getContact().getEmail());
+            response.setContactPhone(appointment.getContact().getPhoneNumber());
             appointmentList.add(response);
         }
         return appointmentList;

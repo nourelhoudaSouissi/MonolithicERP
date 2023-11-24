@@ -1,5 +1,5 @@
 package com.csidigital.shared.enumeration;
 
 public enum LegalStatus {
-    SARL , SA
+    SARL , SA, SUARL, SP, FREELANCE
 }

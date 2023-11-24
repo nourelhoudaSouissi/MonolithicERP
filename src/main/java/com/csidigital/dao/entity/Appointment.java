@@ -1,5 +1,6 @@
 package com.csidigital.dao.entity;
 
+import com.csidigital.shared.enumeration.AppointmentType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,10 @@ public class Appointment implements Serializable {
     private String location;
     private Long duration;
     private String subject;
+    @Enumerated(EnumType.STRING)
+    private AppointmentType appointmentType;
+    private String noteBefore;
+    private String noteAfter;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)

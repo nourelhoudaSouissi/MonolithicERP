@@ -10,6 +10,7 @@ import com.csidigital.shared.dto.request.PartnerFinishRequest;
 import com.csidigital.shared.dto.request.PartnerRequest;
 import com.csidigital.shared.dto.response.PartnerResponse;
 import com.csidigital.shared.enumeration.CompanyStatus;
+import com.csidigital.shared.enumeration.LegalStatus;
 import com.csidigital.shared.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -56,6 +57,18 @@ public class PartnerServiceImpl implements PartnerService {
       partner.setCreationDate(currentDate);
       /*sequence.incrementNextValue();
       sequenceRepository.save(sequence);*/
+     /*********    A enlever si n'est pas besoin test de controle required *******/
+      LegalStatus legalStatus = request.getLegalStatus(); // Assuming this gets the legal status as a LegalStatus enum
+
+      // Check if legalStatus is null or empty, and set it accordingly
+      if (legalStatus == null || legalStatus.equals("")) {
+         partner.setLegalStatus(null); // Set legalStatus as null if empty or null in the request
+      } else {
+         partner.setLegalStatus(legalStatus);
+      }
+      /*********  *********************************************** *******/
+
+
       Partner partnerSaved = partnerRepository.save(partner);
       return modelMapper.map(partnerSaved, PartnerResponse.class);
    }
