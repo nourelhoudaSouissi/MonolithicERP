@@ -27,6 +27,9 @@ public class ProfileUpdated implements Serializable {
     private LocalDate endDate;
     private Long period;
     private Double candidateDailyCost;
+    private Double totalDiscount;
+    private Double profileDiscount;
+
     @Column(length = 10000)
     private String comment;
     @JsonIgnore

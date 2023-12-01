@@ -25,6 +25,9 @@ public class ProfileUpdatedRequest {
     private Profile profile;
     private Long profileNum;
     private Long quotationNum;
+    private Double totalDiscount;
+    private Double profileDiscount;
+
 
     void profile(){
         if(this.profileNum != null){

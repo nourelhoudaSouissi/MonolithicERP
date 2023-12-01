@@ -3,6 +3,8 @@ package com.csidigital.shared.dto.response;
 import com.csidigital.shared.enumeration.Experience;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class ProfileResponse {
     private Long id;
@@ -10,5 +12,16 @@ public class ProfileResponse {
     private Experience experience;
     private Double candidateDailyCost;
     private String comment;
+    private Double yearsOfExperience;
+    private String technologie;
+    private Boolean isActif;
+    private LocalDate activationDate;
+    private LocalDate deativationDate;
     private Long catalogId;
+    private Long profileDomaineId;
+    private String profileDomaineTitle;
+    private ProfileDomainResponse profileDomain;
+
+
+
 }

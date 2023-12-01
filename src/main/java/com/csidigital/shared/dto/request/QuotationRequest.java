@@ -23,6 +23,8 @@ public class QuotationRequest {
     private String currency;
     private Currency catalogCurrency;
     private String addressBuyer;
+    private String contactBuyer;
+    private Long legalIdentifier;
     private Long partnerNum;
     private Double htRevenue;
     private Double tvaCost;
@@ -33,5 +35,8 @@ public class QuotationRequest {
     private Double revenue;
     private Long RequirementNum;
     private Long catalogNum;
+
+    private Double htRevenueRemiseProfile;
+
     private List<ProfileUpdatedRequest> profiles;
 }

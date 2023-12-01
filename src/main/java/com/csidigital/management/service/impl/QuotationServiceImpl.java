@@ -78,7 +78,19 @@ public class QuotationServiceImpl implements QuotationService {
                 // Save the Profile in the database if it has not been saved yet
                 profile1.setExperience(pro.getExperience());
                 profile1.setFunction(pro.getFunction());
+                //Calcule Totale sans pourcentage de chaque ligne de profile dans devis
                 profile1.setTotal(profile1.getCandidateDailyCost() * profile1.getPeriod() * profile1.getCandidateNumber());
+                //Calcule Totale avec pourcentage de chaque ligne de profile dans devis
+
+               /* double totalDiscount = profile1.getTotal() * (profile1.getProfileDiscount() / 100); //profileDiscount est en pourcentage
+                profile1.setTotalDiscount(totalDiscount);*/
+
+                double total = profile1.getTotal(); // Obtenez le montant total initial
+                double discount = profile1.getTotal() * (profile1.getProfileDiscount() / 100); // Calcul du montant du rabais
+                double totalAfterDiscount = total - discount; // Calcul du montant après remise
+                profile1.setTotalDiscount(totalAfterDiscount); // Définir le montant total après la remise
+
+
                 profile1.setQuotation(quotationSaved);
                 //profile1.setCandidateDailyCost(pro.getCandidateDailyCost());
                 System.out.println("HOOOOOOOOOOOOOOOOOOLAAAAAAAAAAAAAAA");
@@ -141,10 +153,14 @@ public class QuotationServiceImpl implements QuotationService {
                 profile1.setFunction(pro.getFunction());
                 System.out.println("17");
                 Double cost = pro.getCandidateDailyCost() * existingQuotation.getChangeRate();
+
                 System.out.println("18");
                 profile1.setCandidateDailyCost((double)cost.longValue());
+
                 profile1.setTotal(profile1.getCandidateDailyCost() * profile1.getPeriod() * profile1.getCandidateNumber());
                 System.out.println(profile1.getTotal());
+                double totalDiscount = profile1.getTotal() * (profile1.getProfileDiscount() / 100); //profileDiscount est en pourcentage
+                profile1.setTotalDiscount(totalDiscount);
                 profile1.setQuotation(existingQuotation);
                 System.out.println("HOOOOOOOOOOOOOOOOOOLAAAAAAAAAAAAAAA");
                 profile1.setProfile(pro);

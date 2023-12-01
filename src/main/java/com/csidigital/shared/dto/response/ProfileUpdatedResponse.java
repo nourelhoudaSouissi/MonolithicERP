@@ -19,4 +19,7 @@ public class ProfileUpdatedResponse {
     private String comment;
     private Long profileId;
     private Long quotationId;
+    private Double totalDiscount;
+    private Double profileDiscount;
+
 }

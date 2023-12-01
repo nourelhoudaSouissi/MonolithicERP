@@ -23,11 +23,15 @@ public class QuotationResponse {
     private Double revenueOrd;
     private Float changeRate;
     private Double discountAmount;
+    private Double htRevenueRemiseProfile;
+
     private Double revenue;
     private Float discount;
     private String comment;
     private Long partnerNum;
     private String addressBuyer;
+    private String contactBuyer;
+    private Long legalIdentifier;
     private Currency currency;
     private Currency catalogCurrency;
     private Long catalogNum;

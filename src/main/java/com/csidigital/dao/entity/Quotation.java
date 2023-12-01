@@ -36,8 +36,13 @@ public class Quotation implements Serializable {
     //otherPaymentMode
     private String otherPaymentMode;
     private String addressBuyer;
+
+    private String contactBuyer;
+    private Long legalIdentifier;
     //private Long rib;
     private Double htRevenue;
+    private Double htRevenueRemiseProfile;
+
     private Double tvaCost;
     private Double revenueOrd;
     private Float changeRate;
@@ -87,9 +92,12 @@ public class Quotation implements Serializable {
 
     public void calculateQuotationRevenue() {
         Double quotationRevenue = 0.0;
+        Double quotationRevenueRemise = 0.0;
         List<ProfileUpdated> profiles = this.getProfiles();
         for (ProfileUpdated profile : profiles){
             quotationRevenue += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod();
+            quotationRevenueRemise += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod() * (1 - (profile.getProfileDiscount() / 100));
+
         }
         this.setHtRevenue(quotationRevenue);
         Double discountAmount = getDiscount()/100 * getHtRevenue();
@@ -100,5 +108,9 @@ public class Quotation implements Serializable {
         this.setTvaCost(tvaCost);
         Double orderRevenue = revenue + tvaCost;
         this.setRevenueOrd(orderRevenue);
+
+        this.setHtRevenueRemiseProfile(quotationRevenueRemise);
     }
+
+
 }

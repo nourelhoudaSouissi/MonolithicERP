@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -24,6 +25,13 @@ public class Profile implements Serializable {
     private Double candidateDailyCost;
     @Column(length = 10000)
     private String comment;
+
+    private Double yearsOfExperience;
+    private String technologie;
+    private Boolean isActif;
+    private LocalDate activationDate;
+    private LocalDate deativationDate;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     private Catalog catalog ;
@@ -43,4 +51,8 @@ public class Profile implements Serializable {
                 ", catalog='" + catalog + '\'' +
                 '}';
     }
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "profile_domain_id")
+    private ProfileDomain profileDomain;
 }
