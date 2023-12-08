@@ -5,6 +5,7 @@ import com.csidigital.dao.entity.BankAccount;
 import com.csidigital.dao.entity.Contact;
 import com.csidigital.dao.entity.Requirement;
 import com.csidigital.shared.enumeration.*;
+import com.csidigital.shared.enumeration.PaymentCondition;
 import jakarta.persistence.Lob;
 import lombok.Data;
 
@@ -68,4 +69,8 @@ public class PartnerRequest {
     //private List<OfferedService> offeredServices;
     //private List<SocialMedia> socialMedias ;
     private List<BankAccount> bankAccounts ;
+    private Boolean isTaxable;
+
+    private Long paymentTermNum;
+
 }

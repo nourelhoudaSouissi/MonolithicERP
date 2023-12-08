@@ -24,6 +24,11 @@ public class QuotationResponse {
     private Float changeRate;
     private Double discountAmount;
     private Double htRevenueRemiseProfile;
+    private Long limitDuration;
+    private LocalDate ValidationDate;
+    private LocalDate sentDate;
+    private LocalDate refusedDate;
+    private LocalDate unansweredDate;
 
     private Double revenue;
     private Float discount;

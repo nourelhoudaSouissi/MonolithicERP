@@ -50,6 +50,12 @@ public class Quotation implements Serializable {
     private Double discountAmount;
     private Long catalogNum;
     private Double revenue;
+    private Long limitDuration;
+    private LocalDate ValidationDate;
+    private LocalDate sentDate;
+    private LocalDate refusedDate;
+    private LocalDate unansweredDate;
+
     @Column(length = 10000)
     private String comment;
     @Enumerated(EnumType.STRING)
@@ -100,13 +106,17 @@ public class Quotation implements Serializable {
 
         }
         this.setHtRevenue(quotationRevenue);
-        Double discountAmount = getDiscount()/100 * getHtRevenue();
-        this.setDiscountAmount(discountAmount);
-        Double revenue = getHtRevenue() - getDiscountAmount();
+
+       /* Double discountAmount = getDiscount()/100 * getHtRevenue();
+        this.setDiscountAmount(discountAmount);*/
+
+       /* Double revenue = getHtRevenue() - getDiscountAmount();
         this.setRevenue(revenue);
-        Double tvaCost = getRevenue() * getTva()/100;
+*/
+        Double tvaCost = quotationRevenueRemise * getTva()/100;
         this.setTvaCost(tvaCost);
-        Double orderRevenue = revenue + tvaCost;
+
+        Double orderRevenue = quotationRevenueRemise + tvaCost;
         this.setRevenueOrd(orderRevenue);
 
         this.setHtRevenueRemiseProfile(quotationRevenueRemise);

@@ -37,6 +37,10 @@ public class QuotationRequest {
     private Long catalogNum;
 
     private Double htRevenueRemiseProfile;
-
     private List<ProfileUpdatedRequest> profiles;
+    private Long limitDuration;
+    private LocalDate ValidationDate;
+    private LocalDate sentDate;
+    private LocalDate refusedDate;
+    private LocalDate unansweredDate;
 }

@@ -3,6 +3,7 @@ package com.csidigital.dao.entity;
 
 import com.csidigital.shared.enumeration.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -70,6 +71,7 @@ public class Partner implements Serializable {
     private boolean blocked;
     private String blockingReason;
     private String reason;
+    private Boolean isTaxable;
     //@Enumerated(EnumType.STRING)
     //private Provenance provenance ;
     //@Enumerated(EnumType.STRING)
@@ -119,4 +121,13 @@ public class Partner implements Serializable {
         this.paymentMode = paymentMode;
         this.paymentCondition = paymentCondition;
     }
+
+   /* @ManyToOne
+    @JoinColumn(name = "paymentTermId")
+    private PaymentTerm paymentTerm;*/
+
+    @JsonIgnore
+   // @Nullable
+    @ManyToOne(fetch = FetchType.EAGER)
+    private PaymentTerm paymentTerm ;
 }

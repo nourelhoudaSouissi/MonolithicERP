@@ -2,6 +2,7 @@ package com.csidigital.shared.dto.response;
 
 import com.csidigital.dao.entity.*;
 import com.csidigital.shared.enumeration.*;
+import com.csidigital.shared.enumeration.PaymentCondition;
 import jakarta.persistence.Lob;
 import lombok.Data;
 
@@ -64,4 +65,10 @@ public class PartnerResponse {
     //private List<SocialMedia> socialMedias ;
     private List<BankAccount> bankAccounts ;
     private List<ContractClient> contracts ;
+    private Boolean isTaxable;
+
+    private Long paymentTermId;
+    //private String paymentTermTitle;
+   // private PaymentTermResponse paymentTerm;
+
 }

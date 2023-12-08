@@ -3,6 +3,7 @@ package com.csidigital.management.service.impl;
 import com.csidigital.dao.entity.*;
 import com.csidigital.dao.repository.PartnerRepository;
 import com.csidigital.dao.repository.PartnerSequenceRepository;
+import com.csidigital.dao.repository.PaymentTermRepository;
 import com.csidigital.management.service.PartnerService;
 import com.csidigital.shared.dto.request.PartnerCoordonneesRequest;
 import com.csidigital.shared.dto.request.PartnerFinancialRequest;
@@ -30,11 +31,17 @@ public class PartnerServiceImpl implements PartnerService {
    private ModelMapper modelMapper;
    @Autowired
    private PartnerSequenceRepository sequenceRepository;
+   @Autowired
+   private PaymentTermRepository paymentTermRepository;
    private String partnerReference;
 
    @Override
    public PartnerResponse createPartner( PartnerRequest request) {
-
+      PaymentTerm paymentTerm = null;
+      if(request.getPaymentTermNum()!=null) {
+         paymentTerm = paymentTermRepository.findById(request.getPaymentTermNum())
+                 .orElseThrow();
+      }
          PartnerReferenceSequence sequence = new PartnerReferenceSequence();
          sequenceRepository.save(sequence);
 
@@ -50,6 +57,7 @@ public class PartnerServiceImpl implements PartnerService {
          case SUPPLIER: partnerReference = String.format("FR_%07d", sequence.getId());
          break;
       }
+      partner.setPaymentTerm(paymentTerm);
       partner.setRef(partnerReference);
       partner.getRefs().add(partnerReference);
       // Définition de la contractDate à la date actuelle
@@ -89,6 +97,13 @@ public class PartnerServiceImpl implements PartnerService {
    public PartnerResponse completePartnerFinancial(PartnerFinancialRequest request) {
       Partner existingPartner = partnerRepository.findById(request.getId())
               .orElseThrow(()-> new ResourceNotFoundException("Partner with id: " + request.getId() + " not found"));
+      PaymentTerm paymentTerm = null;
+      if(request.getPaymentTermNum()!=null) {
+         paymentTerm = paymentTermRepository.findById(request.getPaymentTermNum())
+                 .orElseThrow();
+      }
+      existingPartner.setPaymentTerm(paymentTerm);
+
       existingPartner.setCurrency(request.getCurrency());
       existingPartner.setPaymentMode(request.getPaymentMode());
       existingPartner.setPaymentCondition(request.getPaymentCondition());

@@ -205,21 +205,39 @@ public class QuotationServiceImpl implements QuotationService {
         Partner partner = partnerRepository.findById(quotation.getPartnerNum())
                 .orElseThrow(()-> new ResourceNotFoundException("Partner with id " +id+ " not found"));
         partnerRepository.updateStatusToClient(partner.getId());
+        quotation.setSentDate(LocalDate.now());
+
+        Long limitDuration = quotation.getLimitDuration();
+        if (limitDuration != null && quotation.getSentDate() != null) {
+            LocalDate validationDate = quotation.getSentDate().plusDays(limitDuration);
+            quotation.setValidationDate(validationDate);
+        } else {
+            quotation.setValidationDate(null);
+        }
+
+
         quotationRepository.updateStatusToAccepted(id);
     }
 
     @Override
     public void updateStatusToInProgress(Long id) {
+
         quotationRepository.updateStatusToInProgress(id);
     }
 
     @Override
     public void updateStatusToRefused(Long id) {
+        Quotation quotation = quotationRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Quotation with id " +id+ " not found"));
+        quotation.setRefusedDate(LocalDate.now());
         quotationRepository.updateStatusToRefused(id);
     }
 
     @Override
     public void updateStatusToUnanswered(Long id) {
+        Quotation quotation = quotationRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Quotation with id " +id+ " not found"));
+        quotation.setUnansweredDate(LocalDate.now());
         quotationRepository.updateStatusToUnanswered(id);
     }
 

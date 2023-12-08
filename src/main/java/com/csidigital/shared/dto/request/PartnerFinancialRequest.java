@@ -11,4 +11,5 @@ public class PartnerFinancialRequest {
     private Currency currency;
     private PaymentMode paymentMode;
     private PaymentCondition paymentCondition;
+    private Long paymentTermNum;
 }
