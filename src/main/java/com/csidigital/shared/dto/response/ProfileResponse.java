@@ -1,5 +1,6 @@
 package com.csidigital.shared.dto.response;
 
+import com.csidigital.shared.enumeration.CatalogType;
 import com.csidigital.shared.enumeration.Experience;
 import lombok.Data;
 
@@ -18,10 +19,10 @@ public class ProfileResponse {
     private LocalDate activationDate;
     private LocalDate deativationDate;
     private Long catalogId;
-    private Long profileDomaineId;
-    private String profileDomaineTitle;
-    private ProfileDomainResponse profileDomain;
-
+    private Long profileDomainId;
+    // private String profileDomaineTitle;
+    //private ProfileDomainResponse profileDomain;
+    private CatalogType catalogType = CatalogType.RESOURCE;
 
 
 }

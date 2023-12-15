@@ -1,6 +1,7 @@
 package com.csidigital.shared.dto.request;
 
 import com.csidigital.dao.entity.Profile;
+import com.csidigital.dao.entity.Service;
 import com.csidigital.shared.enumeration.Currency;
 import lombok.Data;
 
@@ -16,5 +17,7 @@ public class CatalogRequest {
     private String title;
     private String comment;
     private Currency currency;
-    private List<Profile> profiles;
+    private List<ProfileRequest> profiles;
+    private List<ServiceRequest> services;
+
 }

@@ -13,16 +13,17 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileDomain implements Serializable {
+public class TvaCode implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String code;
     private String description;
+    private Integer tvaValue;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "profileDomain", cascade = CascadeType.ALL)
-    private List<Profile> profiles;
-
+    @OneToMany(mappedBy = "tvaCode", cascade = CascadeType.ALL)
+    private List<Service> services ;
 
 }

@@ -43,4 +43,6 @@ public class QuotationResponse {
     private Long requirementId;
     private Long orderId;
     private List<ProfileUpdatedResponse> profiles;
+    private List<ServiceUpdatedResponse> services;
+
 }

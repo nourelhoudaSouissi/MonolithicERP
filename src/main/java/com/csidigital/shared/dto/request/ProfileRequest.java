@@ -1,6 +1,7 @@
 package com.csidigital.shared.dto.request;
 
 
+import com.csidigital.shared.enumeration.CatalogType;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,4 +19,6 @@ public class ProfileRequest {
     private LocalDate deativationDate;
     private Long catalogNum;
     private Long profileDomainNum;
+    private CatalogType catalogType = CatalogType.RESOURCE;
+
 }

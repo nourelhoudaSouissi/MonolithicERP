@@ -38,6 +38,8 @@ public class QuotationRequest {
 
     private Double htRevenueRemiseProfile;
     private List<ProfileUpdatedRequest> profiles;
+    private List<ServiceUpdatedRequest> services;
+
     private Long limitDuration;
     private LocalDate ValidationDate;
     private LocalDate sentDate;

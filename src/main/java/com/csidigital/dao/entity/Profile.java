@@ -1,5 +1,6 @@
 package com.csidigital.dao.entity;
 
+import com.csidigital.shared.enumeration.CatalogType;
 import com.csidigital.shared.enumeration.Experience;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -32,6 +33,9 @@ public class Profile implements Serializable {
     private LocalDate activationDate;
     private LocalDate deativationDate;
 
+    @Enumerated(EnumType.STRING)
+    private CatalogType catalogType = CatalogType.RESOURCE;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     private Catalog catalog ;
@@ -39,7 +43,7 @@ public class Profile implements Serializable {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfileUpdated> profiles;
 
-    @Override
+   /* @Override
     public String toString() {
         return "Profile{" +
                 "id=" + id +
@@ -50,9 +54,12 @@ public class Profile implements Serializable {
                 ", profiles='" + profiles + '\'' +
                 ", catalog='" + catalog + '\'' +
                 '}';
-    }
+    }*/
+
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_domain_id")
-    private ProfileDomain profileDomain;
+    private ProfileDomain profileDomain ;
+
+
 }

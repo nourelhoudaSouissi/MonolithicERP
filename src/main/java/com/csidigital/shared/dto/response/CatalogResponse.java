@@ -1,6 +1,7 @@
 package com.csidigital.shared.dto.response;
 
 import com.csidigital.dao.entity.Profile;
+import com.csidigital.dao.entity.Service;
 import com.csidigital.shared.enumeration.Currency;
 import lombok.Data;
 
@@ -18,5 +19,7 @@ public class CatalogResponse {
     private String creationDate;
     private String comment;
     private Currency currency;
-    private List<Profile> profiles;
+    private List<ProfileResponse> profiles;
+    private List<ServiceResponse> services;
+
 }

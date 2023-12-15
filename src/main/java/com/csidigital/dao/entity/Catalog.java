@@ -33,6 +33,10 @@ public class Catalog implements Serializable {
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
     private List<Profile> profiles;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    private List<Service> services;
+
     @Override
     public String toString() {
         return "Catalog{" +

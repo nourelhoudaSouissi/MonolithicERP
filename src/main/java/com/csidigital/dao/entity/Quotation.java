@@ -66,6 +66,11 @@ public class Quotation implements Serializable {
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
     private List<ProfileUpdated> profiles;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
+    private List<ServiceUpdated> services;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Requirement requirement;

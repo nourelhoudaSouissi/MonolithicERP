@@ -59,20 +59,16 @@ public class ProfileServiceImpl implements ProfileService {
             profileDomain = profileDomainRepository.findById(request.getProfileDomainNum())
                     .orElseThrow(() -> new ResourceNotFoundException("Profile Domain not found"));
         }
-
         Catalog catalog = catalogRepository.findById(request.getCatalogNum())
                 .orElseThrow(() -> new ResourceNotFoundException("Catalog not found"));
-
         Profile profile = modelMapper.map(request, Profile.class);
         profile.setCatalog(catalog);
-        profile.setProfileDomain(profileDomain);
-
-        // Ajoutez des logs pour vérifier les valeurs avant de sauvegarder le profil
-        System.out.println("Profile before saving: " + profile);
-
+        if (profileDomain != null) {
+            profile.setProfileDomain(profileDomain);
+        } else {
+            throw new ResourceNotFoundException("ProfileDomain not found for the given ID");
+        }
         Profile profileSaved = profileRepository.save(profile);
-        System.out.println("Profile after saving: " + profileSaved);
-
         return modelMapper.map(profileSaved, ProfileResponse.class);
     }
 

@@ -3,11 +3,14 @@ package com.csidigital.management.service.impl;
 import com.csidigital.dao.entity.*;
 import com.csidigital.dao.repository.*;
 import com.csidigital.management.service.QuotationService;
+import com.csidigital.management.service.ServiceService;
 import com.csidigital.shared.dto.request.ProfileUpdatedRequest;
 import com.csidigital.shared.dto.request.QuotationRequest;
+import com.csidigital.shared.dto.request.ServiceUpdatedRequest;
 import com.csidigital.shared.dto.response.ProfileResponse;
 import com.csidigital.shared.dto.response.QuotationResponse;
 import com.csidigital.shared.dto.response.RequirementResponse;
+import com.csidigital.shared.dto.response.ServiceUpdatedResponse;
 import com.csidigital.shared.enumeration.QuotationStatus;
 import com.csidigital.shared.enumeration.RequirementStatus;
 import com.csidigital.shared.exception.ResourceNotFoundException;
@@ -32,7 +35,11 @@ public class QuotationServiceImpl implements QuotationService {
     @Autowired
     private ProfileUpdatedRepository profileUpdatedRepository;
     @Autowired
+    private ServiceUpdatedRepository serviceUpdatedRepository;
+    @Autowired
     private ProfileServiceImpl profileService;
+    @Autowired
+    private ServiceServiceImpl serviceService;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -51,6 +58,9 @@ public class QuotationServiceImpl implements QuotationService {
         sequenceRepository.save(sequence);
 
         List<ProfileUpdatedRequest> updatedProfiles = request.getProfiles();
+        List<ServiceUpdatedRequest> updatedServices = request.getServices();
+
+
         Quotation quotation = modelMapper.map(request, Quotation.class);
         System.out.println(quotation);
         quotationReference = String.format("QT_%07d", sequence.getId());
@@ -58,16 +68,20 @@ public class QuotationServiceImpl implements QuotationService {
         quotation.setQuotationStatus(QuotationStatus.IN_PROGRESS);
         quotation.setQuotationDate(LocalDate.now());
         quotation.setRequirement(requirement);
-        /*sequence.incrementNextValue();
-        sequenceRepository.save(sequence);*/
+
         quotation.calculateQuotationRevenue();
         System.out.println("ORDER REVENUE" + quotation.getRevenueOrd());
         quotation.getRequirement().setRequirementStatus(RequirementStatus.IN_PROGRESS);
+
         quotation.setProfiles(new ArrayList<>());
+        quotation.setServices(new ArrayList<>());
+
         Quotation quotationSaved = quotationRepository.save(quotation);
         System.out.println("HEEEEEEEEEEEEEEEEEEEERE");
         System.out.println(quotationSaved);
         List<ProfileUpdatedRequest> profiles = request.getProfiles();
+        List<ServiceUpdatedRequest> services = request.getServices();
+
         if (!profiles.isEmpty()) {
             for (ProfileUpdatedRequest profile : profiles) {
                 Profile pro = profile.getProfile();
@@ -82,14 +96,10 @@ public class QuotationServiceImpl implements QuotationService {
                 profile1.setTotal(profile1.getCandidateDailyCost() * profile1.getPeriod() * profile1.getCandidateNumber());
                 //Calcule Totale avec pourcentage de chaque ligne de profile dans devis
 
-               /* double totalDiscount = profile1.getTotal() * (profile1.getProfileDiscount() / 100); //profileDiscount est en pourcentage
-                profile1.setTotalDiscount(totalDiscount);*/
-
                 double total = profile1.getTotal(); // Obtenez le montant total initial
                 double discount = profile1.getTotal() * (profile1.getProfileDiscount() / 100); // Calcul du montant du rabais
                 double totalAfterDiscount = total - discount; // Calcul du montant après remise
                 profile1.setTotalDiscount(totalAfterDiscount); // Définir le montant total après la remise
-
 
                 profile1.setQuotation(quotationSaved);
                 //profile1.setCandidateDailyCost(pro.getCandidateDailyCost());
@@ -98,6 +108,30 @@ public class QuotationServiceImpl implements QuotationService {
                 ProfileUpdated profile2 = profileUpdatedRepository.save(profile1);
             }
         }
+           /* if (!services.isEmpty()) {
+                for (ServiceUpdatedRequest service : services) {
+                    com.csidigital.dao.entity.Service ser = service.getService();
+
+                    ServiceUpdated service1 = modelMapper.map(service, ServiceUpdated.class);
+                    // Save the Profile in the database if it has not been saved yet
+                    service1.setTitle(ser.getTitle());
+                    service1.setCode(ser.getCode());
+
+                    //Calcule Totale sans pourcentage de tva de chaque ligne de profile dans devis
+                    service1.setTotal(service1.getAmount() * service1.getPeriod() * service1.getServiceQuantity());
+
+                    //Calcule Totale avec pourcentage de tva de chaque ligne de profile dans devis
+                    double total = service1.getTotal(); // Obtenez le montant total initial
+                    double tva = service1.getTotal() * (service1.getTvaPercentage() / 100); // Calcul du montant du rabais tva
+                    double totalAfterTva = total - tva; // Calcul du montant après remise tva
+                    service1.setTotalTva(totalAfterTva); // Définir le montant total après la remise
+
+                    service1.setQuotation(quotationSaved);
+                    //profile1.setCandidateDailyCost(pro.getCandidateDailyCost());
+
+                    ServiceUpdated service2 = serviceUpdatedRepository.save(service1);
+                }
+        }*/
         return modelMapper.map(quotationSaved, QuotationResponse.class);
     }
 
