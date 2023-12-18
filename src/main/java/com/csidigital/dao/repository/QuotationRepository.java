@@ -27,5 +27,8 @@ public interface QuotationRepository extends JpaRepository<Quotation, Long> {
     @Modifying
     @Query(value = " UPDATE quotation SET quotation_status = 'UNANSWERED' WHERE id =:id", nativeQuery = true)
     void updateStatusToUnanswered(@Param("id") Long id);
+    @Modifying
+    @Query(value = " UPDATE quotation SET quotation_status = 'SENT_TO_CLIENT' WHERE id =:id", nativeQuery = true)
+    void updateStatusToSentToClient(@Param("id") Long id);
 
 }

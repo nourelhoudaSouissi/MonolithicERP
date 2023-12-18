@@ -108,30 +108,32 @@ public class QuotationServiceImpl implements QuotationService {
                 ProfileUpdated profile2 = profileUpdatedRepository.save(profile1);
             }
         }
-           /* if (!services.isEmpty()) {
-                for (ServiceUpdatedRequest service : services) {
-                    com.csidigital.dao.entity.Service ser = service.getService();
+        if (services != null && !services.isEmpty()) {
+            for (ServiceUpdatedRequest service : services) {
+                com.csidigital.dao.entity.Service ser = service.getService();
 
-                    ServiceUpdated service1 = modelMapper.map(service, ServiceUpdated.class);
-                    // Save the Profile in the database if it has not been saved yet
-                    service1.setTitle(ser.getTitle());
-                    service1.setCode(ser.getCode());
+                ServiceUpdated service1 = modelMapper.map(service, ServiceUpdated.class);
+                // Save the Profile in the database if it has not been saved yet
+                service1.setTitle(ser.getTitle());
+                service1.setCode(ser.getCode());
 
-                    //Calcule Totale sans pourcentage de tva de chaque ligne de profile dans devis
-                    service1.setTotal(service1.getAmount() * service1.getPeriod() * service1.getServiceQuantity());
+                //Calcule Totale sans pourcentage de tva de chaque ligne de profile dans devis
+                service1.setTotal(service1.getAmount() * service1.getPeriod() * service1.getServiceQuantity());
 
-                    //Calcule Totale avec pourcentage de tva de chaque ligne de profile dans devis
-                    double total = service1.getTotal(); // Obtenez le montant total initial
-                    double tva = service1.getTotal() * (service1.getTvaPercentage() / 100); // Calcul du montant du rabais tva
-                    double totalAfterTva = total - tva; // Calcul du montant après remise tva
-                    service1.setTotalTva(totalAfterTva); // Définir le montant total après la remise
+                //Calcule Totale avec pourcentage de tva de chaque ligne de profile dans devis
+                double total = service1.getTotal(); // Obtenez le montant total initial
+                double tva = service1.getTotal() * (service1.getTvaPercentage() / 100); // Calcul du montant du rabais tva
+                double totalAfterTva = total - tva; // Calcul du montant après remise tva
+                service1.setTotalTva(totalAfterTva); // Définir le montant total après la remise
+                service1.setQuotation(quotationSaved);
+                ServiceUpdated service2 = serviceUpdatedRepository.save(service1);
+            }
+        } else {
+            // Handle the case when the services list is empty
+            // For example, log a message or perform necessary actions
+            System.out.println("The services list is empty.");
+        }
 
-                    service1.setQuotation(quotationSaved);
-                    //profile1.setCandidateDailyCost(pro.getCandidateDailyCost());
-
-                    ServiceUpdated service2 = serviceUpdatedRepository.save(service1);
-                }
-        }*/
         return modelMapper.map(quotationSaved, QuotationResponse.class);
     }
 
@@ -239,15 +241,8 @@ public class QuotationServiceImpl implements QuotationService {
         Partner partner = partnerRepository.findById(quotation.getPartnerNum())
                 .orElseThrow(()-> new ResourceNotFoundException("Partner with id " +id+ " not found"));
         partnerRepository.updateStatusToClient(partner.getId());
-        quotation.setSentDate(LocalDate.now());
 
-        Long limitDuration = quotation.getLimitDuration();
-        if (limitDuration != null && quotation.getSentDate() != null) {
-            LocalDate validationDate = quotation.getSentDate().plusDays(limitDuration);
-            quotation.setValidationDate(validationDate);
-        } else {
-            quotation.setValidationDate(null);
-        }
+
 
 
         quotationRepository.updateStatusToAccepted(id);
@@ -273,6 +268,22 @@ public class QuotationServiceImpl implements QuotationService {
                 .orElseThrow(()-> new ResourceNotFoundException("Quotation with id " +id+ " not found"));
         quotation.setUnansweredDate(LocalDate.now());
         quotationRepository.updateStatusToUnanswered(id);
+    }
+
+    @Override
+    public void updateStatusToSentToClient(Long id) {
+        Quotation quotation = quotationRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Quotation with id " +id+ " not found"));
+        quotation.setSentDate(LocalDate.now());
+        Long limitDuration = quotation.getLimitDuration();
+        if (limitDuration != null && quotation.getSentDate() != null) {
+            LocalDate validationDate = quotation.getSentDate().plusDays(limitDuration);
+            quotation.setValidationDate(validationDate);
+        } else {
+            quotation.setValidationDate(null);
+        }
+
+        quotationRepository.updateStatusToSentToClient(id);
     }
 
     @Override

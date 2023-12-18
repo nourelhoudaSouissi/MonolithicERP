@@ -17,6 +17,7 @@ public interface QuotationService {
     void updateStatusToInProgress(Long id);
     void updateStatusToRefused(Long id);
     void updateStatusToUnanswered(Long id);
+    void updateStatusToSentToClient(Long id);
     RequirementResponse getReqByQotId(Long qotId);
     void deleteQuotation(Long id);
 }

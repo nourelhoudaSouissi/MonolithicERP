@@ -61,6 +61,10 @@ public class QuotationController {
     void updateStatusToUnanswered(@PathVariable Long id) {
         quotationService.updateStatusToUnanswered(id);
     }
+    @PutMapping("/updateToSentToClient/{id}")
+    void updateStatusToSentToClient(@PathVariable Long id) {
+        quotationService.updateStatusToSentToClient(id);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteQuotation(@PathVariable Long id){
