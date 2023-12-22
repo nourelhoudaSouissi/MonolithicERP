@@ -13,22 +13,21 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class TvaCode implements Serializable {
+public class CalculationUnit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String code;
     private String description;
-    private Integer tvaValue;
+
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tvaCode", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "calculationUnit", cascade = CascadeType.ALL)
     private List<Service> services ;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tvaCode", cascade = CascadeType.ALL)
-    private List<Partner> partners ;
-
+    @OneToMany(mappedBy = "calculationUnit", cascade = CascadeType.ALL)
+    private List<Profile> profiles ;
 
 }

@@ -130,4 +130,12 @@ public class Partner implements Serializable {
    // @Nullable
     @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTerm paymentTerm ;
+
+
+    private Double tvaPercentage;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "tva_code_id")
+    private TvaCode tvaCode ;
 }

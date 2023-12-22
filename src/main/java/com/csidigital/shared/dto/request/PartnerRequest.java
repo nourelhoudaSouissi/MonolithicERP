@@ -72,5 +72,7 @@ public class PartnerRequest {
     private Boolean isTaxable;
 
     private Long paymentTermNum;
+    private Long tvaCodeNum ;
+    private Double tvaPercentage;
 
 }

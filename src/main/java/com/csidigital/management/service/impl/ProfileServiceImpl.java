@@ -1,9 +1,7 @@
 package com.csidigital.management.service.impl;
 
-import com.csidigital.dao.entity.Catalog;
-import com.csidigital.dao.entity.LeaveType;
-import com.csidigital.dao.entity.Profile;
-import com.csidigital.dao.entity.ProfileDomain;
+import com.csidigital.dao.entity.*;
+import com.csidigital.dao.repository.CalculationUnitRepository;
 import com.csidigital.dao.repository.CatalogRepository;
 import com.csidigital.dao.repository.ProfileDomainRepository;
 import com.csidigital.dao.repository.ProfileRepository;
@@ -30,6 +28,8 @@ public class ProfileServiceImpl implements ProfileService {
     private ProfileDomainRepository profileDomainRepository ;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private CalculationUnitRepository calculationUnitRepository ;
   /*  @Override
     public ProfileResponse createProfile(ProfileRequest request) {
         ProfileDomain profileDomain = null;
@@ -59,9 +59,24 @@ public class ProfileServiceImpl implements ProfileService {
             profileDomain = profileDomainRepository.findById(request.getProfileDomainNum())
                     .orElseThrow(() -> new ResourceNotFoundException("Profile Domain not found"));
         }
+
+        CalculationUnit calculationUnit = null;
+        if (request.getCalculationUnitNum() != null) {
+            calculationUnit = calculationUnitRepository.findById(request.getCalculationUnitNum())
+                    .orElseThrow(() -> new ResourceNotFoundException("CalculationUnit not found for the given ID"));
+        }
+
         Catalog catalog = catalogRepository.findById(request.getCatalogNum())
                 .orElseThrow(() -> new ResourceNotFoundException("Catalog not found"));
+
         Profile profile = modelMapper.map(request, Profile.class);
+
+        if (calculationUnit != null) {
+            profile.setCalculationUnit(calculationUnit);
+        } else {
+            throw new ResourceNotFoundException("CalculationUnit not found for the given ID");
+        }
+
         profile.setCatalog(catalog);
         if (profileDomain != null) {
             profile.setProfileDomain(profileDomain);

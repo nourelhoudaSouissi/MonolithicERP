@@ -164,21 +164,36 @@ public class CatalogServiceImpl implements CatalogService {
         Catalog catalog = catalogRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Catalog with id " +id+ " not found"));
         List<Profile> profiles = catalog.getProfiles();
-        List<com.csidigital.dao.entity.Service> services = catalog.getServices();
+       // List<com.csidigital.dao.entity.Service> services = catalog.getServices();
 
         List<ProfileResponse> profilesList = new ArrayList<>();
-        List<ServiceResponse> serviceResponseList = new ArrayList<>();
+      //  List<ServiceResponse> serviceResponseList = new ArrayList<>();
 
         for (Profile profile : profiles) {
             ProfileResponse response = modelMapper.map(profile, ProfileResponse.class);
             profilesList.add(response);
         }
 
+       /* for (com.csidigital.dao.entity.Service service : services) {
+            ServiceResponse response = modelMapper.map(service, ServiceResponse.class);
+            serviceResponseList.add(response);
+        }*/
+        return profilesList;
+    }
+
+    @Override
+    public List<ServiceResponse> getCatalogServicesById(Long id) {
+        Catalog catalog = catalogRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Catalog with id " +id+ " not found"));
+        List<com.csidigital.dao.entity.Service> services = catalog.getServices();
+
+        List<ServiceResponse> serviceResponseList = new ArrayList<>();
+
         for (com.csidigital.dao.entity.Service service : services) {
             ServiceResponse response = modelMapper.map(service, ServiceResponse.class);
             serviceResponseList.add(response);
         }
-        return profilesList;
+        return serviceResponseList;
     }
 
     @Override

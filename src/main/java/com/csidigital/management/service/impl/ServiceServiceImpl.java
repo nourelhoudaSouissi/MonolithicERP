@@ -1,8 +1,10 @@
 package com.csidigital.management.service.impl;
 
+import com.csidigital.dao.entity.CalculationUnit;
 import com.csidigital.dao.entity.Catalog;
 import com.csidigital.dao.entity.Partner;
 import com.csidigital.dao.entity.TvaCode;
+import com.csidigital.dao.repository.CalculationUnitRepository;
 import com.csidigital.dao.repository.CatalogRepository;
 import com.csidigital.dao.repository.ServiceRepository;
 import com.csidigital.dao.repository.TvaCodeRepository;
@@ -32,6 +34,8 @@ public class ServiceServiceImpl implements ServiceService {
     private CatalogRepository catalogRepository ;
     @Autowired
     private TvaCodeRepository tvaCodeRepository ;
+    @Autowired
+    private CalculationUnitRepository calculationUnitRepository ;
 
     /*@Override
     public ServiceResponse createService(ServiceRequest request) {
@@ -58,6 +62,12 @@ public class ServiceServiceImpl implements ServiceService {
                     .orElseThrow(() -> new ResourceNotFoundException("TvaCode not found for the given ID"));
         }
 
+        CalculationUnit calculationUnit = null;
+        if (request.getCalculationUnitNum() != null) {
+            calculationUnit = calculationUnitRepository.findById(request.getCalculationUnitNum())
+                    .orElseThrow(() -> new ResourceNotFoundException("CalculationUnit not found for the given ID"));
+        }
+
         Catalog catalog = catalogRepository.findById(request.getCatalogNum())
                 .orElseThrow(() -> new ResourceNotFoundException("Catalog not found"));
 
@@ -69,6 +79,12 @@ public class ServiceServiceImpl implements ServiceService {
         } else {
             // In case tvaCode is null after retrieval, throw an exception as it's mandatory
             throw new ResourceNotFoundException("TvaCode not found for the given ID");
+        }
+
+        if (calculationUnit != null) {
+            service.setCalculationUnit(calculationUnit);
+        } else {
+            throw new ResourceNotFoundException("CalculationUnit not found for the given ID");
         }
 
         com.csidigital.dao.entity.Service savedService = serviceRepository.save(service);

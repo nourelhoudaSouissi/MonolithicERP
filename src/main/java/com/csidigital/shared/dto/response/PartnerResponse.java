@@ -70,5 +70,6 @@ public class PartnerResponse {
     private Long paymentTermId;
     //private String paymentTermTitle;
    // private PaymentTermResponse paymentTerm;
-
+    private Long tvaCodeId ;
+    private Double tvaPercentage;
 }

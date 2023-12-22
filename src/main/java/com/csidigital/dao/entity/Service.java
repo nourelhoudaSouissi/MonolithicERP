@@ -44,5 +44,10 @@ public class Service implements Serializable {
     @JoinColumn(name = "tva_code_id")
     private TvaCode tvaCode ;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "calculation_unit_id")
+    private CalculationUnit calculationUnit ;
+
 
 }

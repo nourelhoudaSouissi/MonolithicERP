@@ -14,6 +14,6 @@ public class ServiceResponse {
     private String comment;
     private Long tvaCodeId ;
     private Double tvaPercentage;
-
+    private Long calculationUnitId ;
 
 }

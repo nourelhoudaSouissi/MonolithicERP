@@ -4,6 +4,7 @@ import com.csidigital.management.service.impl.CatalogServiceImpl;
 import com.csidigital.shared.dto.request.CatalogRequest;
 import com.csidigital.shared.dto.response.CatalogResponse;
 import com.csidigital.shared.dto.response.ProfileResponse;
+import com.csidigital.shared.dto.response.ServiceResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,11 @@ public class CatalogController {
     @GetMapping("/{id}/profiles")
     public List<ProfileResponse> getCatalogProfilesById(@PathVariable Long id){
         return catalogService.getCatalogProfilesById(id);
+    }
+
+    @GetMapping("/{id}/services")
+    public List<ServiceResponse> getCatalogServicesById(@PathVariable Long id){
+        return catalogService.getCatalogServicesById(id);
     }
 
     @GetMapping("/catalogByProfileId/{profileId}")

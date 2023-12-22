@@ -20,5 +20,6 @@ public class ProfileRequest {
     private Long catalogNum;
     private Long profileDomainNum;
     private CatalogType catalogType = CatalogType.RESOURCE;
+    private Long calculationUnitNum ;
 
 }

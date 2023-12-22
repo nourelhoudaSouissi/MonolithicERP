@@ -24,5 +24,5 @@ public class ProfileResponse {
     //private ProfileDomainResponse profileDomain;
     private CatalogType catalogType = CatalogType.RESOURCE;
 
-
+    private Long calculationUnitId ;
 }

@@ -4,6 +4,7 @@ import com.csidigital.dao.entity.*;
 import com.csidigital.dao.repository.PartnerRepository;
 import com.csidigital.dao.repository.PartnerSequenceRepository;
 import com.csidigital.dao.repository.PaymentTermRepository;
+import com.csidigital.dao.repository.TvaCodeRepository;
 import com.csidigital.management.service.PartnerService;
 import com.csidigital.shared.dto.request.PartnerCoordonneesRequest;
 import com.csidigital.shared.dto.request.PartnerFinancialRequest;
@@ -33,6 +34,8 @@ public class PartnerServiceImpl implements PartnerService {
    private PartnerSequenceRepository sequenceRepository;
    @Autowired
    private PaymentTermRepository paymentTermRepository;
+   @Autowired
+   private TvaCodeRepository tvaCodeRepository ;
    private String partnerReference;
 
    @Override
@@ -45,8 +48,22 @@ public class PartnerServiceImpl implements PartnerService {
          PartnerReferenceSequence sequence = new PartnerReferenceSequence();
          sequenceRepository.save(sequence);
 
+      TvaCode tvaCode = null;
+      if (request.getTvaCodeNum() != null) {
+         tvaCode = tvaCodeRepository.findById(request.getTvaCodeNum())
+                 .orElseThrow(() -> new ResourceNotFoundException("TvaCode not found for the given ID"));
+      }
+
 
       Partner partner = modelMapper.map(request, Partner.class);
+
+      if (tvaCode != null) {
+         partner.setTvaCode(tvaCode);
+      } else {
+         // In case tvaCode is null after retrieval, throw an exception as it's mandatory
+         throw new ResourceNotFoundException("TvaCode not found for the given ID");
+      }
+
       CompanyStatus type = partner.getCompanyStatus();
 
       switch (type){

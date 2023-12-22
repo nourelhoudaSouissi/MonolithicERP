@@ -60,6 +60,9 @@ public class Profile implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_domain_id")
     private ProfileDomain profileDomain ;
-
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "calculation_unit_id")
+    private CalculationUnit calculationUnit ;
 
 }
