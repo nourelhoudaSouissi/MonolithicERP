@@ -32,6 +32,8 @@ public class Profile implements Serializable {
     private Boolean isActif;
     private LocalDate activationDate;
     private LocalDate deativationDate;
+    private Double tvaPercentage;
+    private Double totalTva;
 
     @Enumerated(EnumType.STRING)
     private CatalogType catalogType = CatalogType.RESOURCE;
@@ -64,5 +66,11 @@ public class Profile implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "calculation_unit_id")
     private CalculationUnit calculationUnit ;
+
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "tva_code_id")
+    private TvaCode tvaCode ;
 
 }

@@ -18,6 +18,9 @@ public class ServiceUpdatedResponse {
     private Double total;
     private Double tvaPercentage;
     private Double totalTva;
+
+    private Double totalDiscount;
+    private Double serviceDiscount;
     private Long quotationId;
     private Long serviceId;
 

@@ -33,6 +33,11 @@ public class ServiceUpdated implements Serializable {
     private Double total;
     private Double totalTva;
 
+
+
+    private Double totalDiscount;
+    private Double serviceDiscount;
+
     private Double tvaPercentage;
 
     @JsonIgnore

@@ -28,6 +28,10 @@ public class TvaCode implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "tvaCode", cascade = CascadeType.ALL)
+    private List<Profile> profiles ;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "tvaCode", cascade = CascadeType.ALL)
     private List<Partner> partners ;
 
 

@@ -29,7 +29,8 @@ public class ProfileUpdated implements Serializable {
     private Double candidateDailyCost;
     private Double totalDiscount;
     private Double profileDiscount;
-
+    private Double tvaPercentage;
+    private Double totalTva;
     @Column(length = 10000)
     private String comment;
     @JsonIgnore

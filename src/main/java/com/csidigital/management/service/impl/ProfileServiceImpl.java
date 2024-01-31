@@ -1,10 +1,7 @@
 package com.csidigital.management.service.impl;
 
 import com.csidigital.dao.entity.*;
-import com.csidigital.dao.repository.CalculationUnitRepository;
-import com.csidigital.dao.repository.CatalogRepository;
-import com.csidigital.dao.repository.ProfileDomainRepository;
-import com.csidigital.dao.repository.ProfileRepository;
+import com.csidigital.dao.repository.*;
 import com.csidigital.management.service.ProfileService;
 import com.csidigital.shared.dto.request.ProfileRequest;
 import com.csidigital.shared.dto.response.ProfileResponse;
@@ -30,6 +27,8 @@ public class ProfileServiceImpl implements ProfileService {
     private ModelMapper modelMapper;
     @Autowired
     private CalculationUnitRepository calculationUnitRepository ;
+    @Autowired
+    private TvaCodeRepository tvaCodeRepository ;
   /*  @Override
     public ProfileResponse createProfile(ProfileRequest request) {
         ProfileDomain profileDomain = null;
@@ -54,6 +53,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileResponse createProfile(ProfileRequest request) {
+
+        TvaCode tvaCode = null;
+        if (request.getTvaCodeNum() != null) {
+            tvaCode = tvaCodeRepository.findById(request.getTvaCodeNum())
+                    .orElseThrow(() -> new ResourceNotFoundException("TvaCode not found for the given ID"));
+        }
+
         ProfileDomain profileDomain = null;
         if (request.getProfileDomainNum() != null) {
             profileDomain = profileDomainRepository.findById(request.getProfileDomainNum())
@@ -77,12 +83,19 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ResourceNotFoundException("CalculationUnit not found for the given ID");
         }
 
-        profile.setCatalog(catalog);
         if (profileDomain != null) {
             profile.setProfileDomain(profileDomain);
         } else {
             throw new ResourceNotFoundException("ProfileDomain not found for the given ID");
         }
+        if (tvaCode != null) {
+            profile.setTvaCode(tvaCode);
+        } else {
+            // In case tvaCode is null after retrieval, throw an exception as it's mandatory
+            throw new ResourceNotFoundException("TvaCode not found for the given ID");
+        }
+
+        profile.setCatalog(catalog);
         Profile profileSaved = profileRepository.save(profile);
         return modelMapper.map(profileSaved, ProfileResponse.class);
     }

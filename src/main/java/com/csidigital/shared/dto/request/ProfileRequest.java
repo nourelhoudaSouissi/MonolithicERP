@@ -21,5 +21,7 @@ public class ProfileRequest {
     private Long profileDomainNum;
     private CatalogType catalogType = CatalogType.RESOURCE;
     private Long calculationUnitNum ;
+    private Long tvaCodeNum ;
+    private Double tvaPercentage;
 
 }

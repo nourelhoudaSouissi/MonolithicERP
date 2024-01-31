@@ -103,27 +103,54 @@ public class Quotation implements Serializable {
 
     public void calculateQuotationRevenue() {
         Double quotationRevenue = 0.0;
+        Double quotationRevenueProfiles = 0.0;
+        Double quotationRevenueServices = 0.0;
+
         Double quotationRevenueRemise = 0.0;
+        Double quotationRevenueRemiseProfiles = 0.0;
+        Double quotationRevenueRemiseServices = 0.0;
+
+        Double tvaAmount = 0.0;
+        Double tvaAmountProfiles = 0.0;
+        Double tvaAmountServices = 0.0;
+
+        Double netTtc = 0.0;
+        Double netTtcProfiles = 0.0;
+        Double netTtcServices = 0.0;
         List<ProfileUpdated> profiles = this.getProfiles();
-        for (ProfileUpdated profile : profiles){
+        List<ServiceUpdated> services = this.getServices();
+       /* for (ProfileUpdated profile : profiles){
             quotationRevenue += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod();
             quotationRevenueRemise += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod() * (1 - (profile.getProfileDiscount() / 100));
 
+        }*/
+        for (ProfileUpdated profile : profiles){
+            quotationRevenueProfiles += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod();
+            quotationRevenueRemiseProfiles += profile.getCandidateDailyCost() * profile.getCandidateNumber() * profile.getPeriod() * (1 - (profile.getProfileDiscount() / 100));
+            tvaAmountProfiles += quotationRevenueRemiseProfiles * profile.getTvaPercentage()/100;
+            netTtcProfiles += quotationRevenueRemiseProfiles + tvaAmountProfiles;
         }
+        for (ServiceUpdated service : services){
+            quotationRevenueServices += service.getAmount() * service.getServiceQuantity() * service.getPeriod();
+            quotationRevenueRemiseServices += service.getAmount() * service.getServiceQuantity() * service.getPeriod() * (1 - (service.getServiceDiscount() / 100));
+            tvaAmountServices += quotationRevenueRemiseServices * service.getTvaPercentage()/100;
+            netTtcServices += quotationRevenueRemiseServices + tvaAmountServices;
+        }
+
+        quotationRevenue = quotationRevenueProfiles + quotationRevenueServices;
         this.setHtRevenue(quotationRevenue);
 
-       /* Double discountAmount = getDiscount()/100 * getHtRevenue();
-        this.setDiscountAmount(discountAmount);*/
-
-       /* Double revenue = getHtRevenue() - getDiscountAmount();
-        this.setRevenue(revenue);
-*/
-        Double tvaCost = quotationRevenueRemise * getTva()/100;
+       /* Double tvaCost = quotationRevenueRemise * getTva()/100;
+        this.setTvaCost(tvaCost);*/
+        Double tvaCost = tvaAmountProfiles + tvaAmountServices;
         this.setTvaCost(tvaCost);
 
-        Double orderRevenue = quotationRevenueRemise + tvaCost;
+        /* Double orderRevenue = quotationRevenueRemise + tvaCost;
+        this.setRevenueOrd(orderRevenue);*/
+        Double orderRevenue = netTtcProfiles + netTtcServices;
         this.setRevenueOrd(orderRevenue);
 
+        quotationRevenueRemise = quotationRevenueRemiseProfiles + quotationRevenueRemiseServices;
         this.setHtRevenueRemiseProfile(quotationRevenueRemise);
     }
 

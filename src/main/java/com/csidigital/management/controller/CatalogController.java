@@ -43,7 +43,8 @@ public class CatalogController {
         return catalogService.getCatalogByProfileId(profileId);
     }
 
-    @PostMapping()
+    @PostMapping( produces = "application/json")
+    @ResponseBody
     public CatalogResponse createCatalog(@RequestBody CatalogRequest catalogRequest ){
         System.out.println(catalogRequest.getProfiles());
         return catalogService.createCatalog(catalogRequest );

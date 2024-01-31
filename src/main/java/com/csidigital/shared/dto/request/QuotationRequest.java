@@ -37,6 +37,7 @@ public class QuotationRequest {
     private Long catalogNum;
 
     private Double htRevenueRemiseProfile;
+
     private List<ProfileUpdatedRequest> profiles;
     private List<ServiceUpdatedRequest> services;
 

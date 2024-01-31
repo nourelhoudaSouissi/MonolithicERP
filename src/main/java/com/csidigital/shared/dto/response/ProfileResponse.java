@@ -20,6 +20,8 @@ public class ProfileResponse {
     private LocalDate deativationDate;
     private Long catalogId;
     private Long profileDomainId;
+    private Long tvaCodeId ;
+    private Double tvaPercentage;
     // private String profileDomaineTitle;
     //private ProfileDomainResponse profileDomain;
     private CatalogType catalogType = CatalogType.RESOURCE;

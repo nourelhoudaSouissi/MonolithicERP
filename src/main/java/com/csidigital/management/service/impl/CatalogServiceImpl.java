@@ -1,12 +1,7 @@
 package com.csidigital.management.service.impl;
 
-import com.csidigital.dao.entity.Catalog;
-import com.csidigital.dao.entity.Profile;
-import com.csidigital.dao.entity.TvaCode;
-import com.csidigital.dao.repository.CatalogRepository;
-import com.csidigital.dao.repository.ProfileRepository;
-import com.csidigital.dao.repository.ServiceRepository;
-import com.csidigital.dao.repository.TvaCodeRepository;
+import com.csidigital.dao.entity.*;
+import com.csidigital.dao.repository.*;
 import com.csidigital.management.service.CatalogService;
 import com.csidigital.shared.dto.request.CatalogRequest;
 import com.csidigital.shared.dto.request.ProfileRequest;
@@ -35,6 +30,11 @@ public class CatalogServiceImpl implements CatalogService {
     private ProfileRepository profileRepository ;
     @Autowired
     private ServiceRepository serviceRepository ;
+    @Autowired
+    private CalculationUnitRepository calculationUnitRepository;
+    @Autowired
+    private ProfileDomainRepository profileDomainRepository;
+
 
     @Autowired
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -83,7 +83,27 @@ public class CatalogServiceImpl implements CatalogService {
       if (profiles != null && !profiles.isEmpty()) {
           for (ProfileRequest profileRequest : profiles) {
               Profile profile = modelMapper.map(profileRequest, Profile.class);
+              CalculationUnit calculationUnit = calculationUnitRepository.findById(profileRequest.getCalculationUnitNum())
+                      .orElseThrow(() -> new ResourceNotFoundException("CalculationUnit not found for the given ID"));
+              profile.setCalculationUnit(calculationUnit);
               profile.setCatalog(catalog);
+
+              /*ProfileDomain profileDomain = profileDomainRepository.findById(profileRequest.getProfileDomainNum())
+                      .orElseThrow(() -> new ResourceNotFoundException("ProfilDomain not found for the given ID"));
+              profile.setProfileDomain(profileDomain);*/
+              Long profileDomainId = profileRequest.getProfileDomainNum();
+              if (profileDomainId != null) {
+                  ProfileDomain profileDomain = profileDomainRepository.findById(profileDomainId)
+                          .orElseThrow(() -> new ResourceNotFoundException("ProfileDomain not found for the given ID"));
+                  profile.setProfileDomain(profileDomain);
+              } else {
+                  // Handle the case when profileDomainId is null
+                  // For example, you can set a default profile domain or skip setting it
+                  // Here, we're setting it to null, assuming it's acceptable for your use case.
+                  profile.setProfileDomain(null);
+              }
+
+
               profileRepository.save(profile);
           }
       }
@@ -92,6 +112,11 @@ public class CatalogServiceImpl implements CatalogService {
           for (ServiceRequest serviceRequest : services) {
               com.csidigital.dao.entity.Service service = modelMapper.map(serviceRequest, com.csidigital.dao.entity.Service.class);
               service.setCatalog(catalog);
+              CalculationUnit calculationUnit = calculationUnitRepository.findById(serviceRequest.getCalculationUnitNum())
+                      .orElseThrow(() -> new ResourceNotFoundException("CalculationUnit not found for the given ID"));
+
+              service.setCalculationUnit(calculationUnit);
+
               serviceRepository.save(service); // Save each service individually
           }
       }

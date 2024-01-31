@@ -27,7 +27,8 @@ public class ProfileUpdatedRequest {
     private Long quotationNum;
     private Double totalDiscount;
     private Double profileDiscount;
-
+    private Double tvaPercentage;
+    private Double totalTva;
 
     void profile(){
         if(this.profileNum != null){

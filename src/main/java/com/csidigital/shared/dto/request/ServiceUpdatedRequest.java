@@ -29,7 +29,8 @@ public class ServiceUpdatedRequest {
     private Double total;
     private Double tvaPercentage;
     private Double totalTva;
-
+    private Double totalDiscount;
+    private Double serviceDiscount;
     private Long quotationNum;
     private Long serviceNum;
     private Service service;

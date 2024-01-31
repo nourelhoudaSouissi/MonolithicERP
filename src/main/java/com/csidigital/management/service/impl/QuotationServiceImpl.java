@@ -14,8 +14,10 @@ import com.csidigital.shared.dto.response.ServiceUpdatedResponse;
 import com.csidigital.shared.enumeration.QuotationStatus;
 import com.csidigital.shared.enumeration.RequirementStatus;
 import com.csidigital.shared.exception.ResourceNotFoundException;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.util.List;
 @Service
 @Transactional
 public class QuotationServiceImpl implements QuotationService {
+
     @Autowired
     private QuotationRepository quotationRepository ;
     @Autowired
@@ -42,14 +45,18 @@ public class QuotationServiceImpl implements QuotationService {
     private ServiceServiceImpl serviceService;
     @Autowired
     private ModelMapper modelMapper;
+
+    @PostConstruct
+    public void configureModelMapper() {
+       // modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+    }
     @Autowired
     private QuotationSequenceRepository sequenceRepository;
     private String quotationReference;
     @Override
     public QuotationResponse createQuotation(QuotationRequest request) {
-        System.out.println(request.getRequirementNum());
-        System.out.println("profiles");
-        System.out.println(request.getProfiles());
+
 
         Requirement requirement = requirementRepository.findById(request.getRequirementNum())
                 .orElseThrow(() -> new ResourceNotFoundException("Requirement not found"));
@@ -62,7 +69,8 @@ public class QuotationServiceImpl implements QuotationService {
 
 
         Quotation quotation = modelMapper.map(request, Quotation.class);
-        System.out.println(quotation);
+
+
         quotationReference = String.format("QT_%07d", sequence.getId());
         quotation.setRef(quotationReference);
         quotation.setQuotationStatus(QuotationStatus.IN_PROGRESS);
@@ -70,15 +78,13 @@ public class QuotationServiceImpl implements QuotationService {
         quotation.setRequirement(requirement);
 
         quotation.calculateQuotationRevenue();
-        System.out.println("ORDER REVENUE" + quotation.getRevenueOrd());
         quotation.getRequirement().setRequirementStatus(RequirementStatus.IN_PROGRESS);
 
         quotation.setProfiles(new ArrayList<>());
         quotation.setServices(new ArrayList<>());
 
         Quotation quotationSaved = quotationRepository.save(quotation);
-        System.out.println("HEEEEEEEEEEEEEEEEEEEERE");
-        System.out.println(quotationSaved);
+
         List<ProfileUpdatedRequest> profiles = request.getProfiles();
         List<ServiceUpdatedRequest> services = request.getServices();
 
@@ -101,10 +107,16 @@ public class QuotationServiceImpl implements QuotationService {
                 double totalAfterDiscount = total - discount; // Calcul du montant après remise
                 profile1.setTotalDiscount(totalAfterDiscount); // Définir le montant total après la remise
 
+
+
+                //Calcule Totale avec pourcentage de tva de chaque ligne de profile dans devis
+                double total2 = profile1.getTotal(); // Obtenez le montant total initial
+                double tva = profile1.getTotal() * (profile1.getTvaPercentage() / 100); // Calcul du montant du rabais tva
+                double totalAfterTva = total2 + tva; // Calcul du montant après remise tva
+                profile1.setTotalTva(totalAfterTva); // Définir le montant total après la remise
+
                 profile1.setQuotation(quotationSaved);
-                //profile1.setCandidateDailyCost(pro.getCandidateDailyCost());
-                System.out.println("HOOOOOOOOOOOOOOOOOOLAAAAAAAAAAAAAAA");
-                System.out.println(profile1);
+
                 ProfileUpdated profile2 = profileUpdatedRepository.save(profile1);
             }
         }
@@ -120,10 +132,15 @@ public class QuotationServiceImpl implements QuotationService {
                 //Calcule Totale sans pourcentage de tva de chaque ligne de profile dans devis
                 service1.setTotal(service1.getAmount() * service1.getPeriod() * service1.getServiceQuantity());
 
+                double totalLine = service1.getTotal(); // Obtenez le montant total initial
+                double discount = service1.getTotal() * (service1.getServiceDiscount() / 100); // Calcul du montant du rabais
+                double totalAfterDiscount = totalLine - discount; // Calcul du montant après remise
+                service1.setTotalDiscount(totalAfterDiscount); // Définir le montant total après la remise
+
                 //Calcule Totale avec pourcentage de tva de chaque ligne de profile dans devis
-                double total = service1.getTotal(); // Obtenez le montant total initial
+                //double total = service1.getTotal(); // Obtenez le montant total initial
                 double tva = service1.getTotal() * (service1.getTvaPercentage() / 100); // Calcul du montant du rabais tva
-                double totalAfterTva = total - tva; // Calcul du montant après remise tva
+                double totalAfterTva = totalAfterDiscount + tva; // Calcul du montant après remise tva
                 service1.setTotalTva(totalAfterTva); // Définir le montant total après la remise
                 service1.setQuotation(quotationSaved);
                 ServiceUpdated service2 = serviceUpdatedRepository.save(service1);

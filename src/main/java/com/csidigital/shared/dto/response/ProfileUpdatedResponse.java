@@ -21,5 +21,8 @@ public class ProfileUpdatedResponse {
     private Long quotationId;
     private Double totalDiscount;
     private Double profileDiscount;
+    private Double tvaPercentage;
+    private Double totalTva;
+
 
 }
